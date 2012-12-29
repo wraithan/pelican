@@ -198,12 +198,14 @@ class ArticlesGenerator(Generator):
             arts.sort(key=attrgetter('date'), reverse=True)
             if self.settings.get('CATEGORY_FEED_ATOM'):
                 writer.write_feed(arts, self.context,
-                                  self.settings['CATEGORY_FEED_ATOM'] % cat)
+                                  self.settings['CATEGORY_FEED_ATOM'] % cat,
+                                  site_url=self.settings['CATEGORY_URL'] % cat.name.lower())
 
             if self.settings.get('CATEGORY_FEED_RSS'):
                 writer.write_feed(arts, self.context,
                                   self.settings['CATEGORY_FEED_RSS'] % cat,
-                                  feed_type='rss')
+                                  feed_type='rss',
+                                  site_url=self.settings['CATEGORY_URL'] % cat)
 
         if self.settings.get('TAG_FEED_ATOM') \
                 or self.settings.get('TAG_FEED_RSS'):

@@ -45,7 +45,8 @@ class Writer(object):
             pubdate=set_date_tzinfo(item.date,
                 self.settings.get('TIMEZONE', None)))
 
-    def write_feed(self, elements, context, filename=None, feed_type='atom'):
+    def write_feed(self, elements, context, filename=None, feed_type='atom',
+                   site_url=None):
         """Generate a feed with the list of articles provided
 
         Return the feed. If no output_path or filename is specified, just
@@ -59,8 +60,9 @@ class Writer(object):
         old_locale = locale.setlocale(locale.LC_ALL)
         locale.setlocale(locale.LC_ALL, 'C')
         try:
-            self.site_url = context.get('SITEURL', get_relative_path(filename))
-            self.feed_domain = context.get('FEED_DOMAIN')
+            self.site_url = site_url or context.get('SITEURL',
+                                                    get_relative_path(filename))
+            self.feed_domain = site_url or context.get('FEED_DOMAIN')
             self.feed_url = '%s/%s' % (self.feed_domain, filename)
 
             feed = self._create_new_feed(feed_type, context)
